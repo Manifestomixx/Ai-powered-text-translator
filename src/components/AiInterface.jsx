@@ -140,7 +140,7 @@ const AiInterface = () => {
   }, [summary]);
 
   return (
-    <main className="relative h-screen md:min-h-dvh overflow-hidden ">
+    <main className="relative h-dvh md:min-h-dvh overflow-hidden ">
       {/* Logo section */}
       <div className="text-start">
         <div
