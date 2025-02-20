@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { IoMdSend } from "react-icons/io";
+import { IoMdArrowRoundUp } from "react-icons/io";
 import { RxCross1 } from "react-icons/rx";
 import { MdOutlineTranslate } from "react-icons/md";
 import { IoLogoIonitron } from "react-icons/io";
@@ -8,6 +8,8 @@ import { useLanguageDetector } from "../chrome/useLanguageDetector";
 import { useSummarizer } from "../chrome/Summarizer";
 import { useTranslator } from "../chrome/TextTranslator";
 import spinner from "../assets/svg-spinners--180-ring-with-bg.svg";
+import { CiLight } from "react-icons/ci";
+import { FaMoon } from "react-icons/fa";
 
 const AiInterface = () => {
   const [messages, setMessages] = useState([]);
@@ -15,6 +17,7 @@ const AiInterface = () => {
   const [loadingMessage, setLoadingMessage] = useState({});
   const [loading, setLoading] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("en");
+  const [theme, setTheme] = useState("light")
   const { detectLanguage, isLoading, detectedLanguage, languageNames } =
     useLanguageDetector();
   const { summary, summarizeText } = useSummarizer();
@@ -129,6 +132,10 @@ const AiInterface = () => {
     }
   };
 
+  function handleToggle() {
+    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+  }
+
   useEffect(() => {
     if (summary && messages.length > 0) {
       setMessages((prevMessages) =>
@@ -137,56 +144,63 @@ const AiInterface = () => {
         )
       );
     }
-  }, [summary]);
+    document.body.className = theme === "light" ? "bg-white text-black" : "bg-black text-white";
+  }, [summary, theme]);
 
   return (
     <main className="relative min-h-screen md:min-h-dvh overflow-hidden ">
       {/* Logo section */}
-      <div className="text-start">
+      <div className="text-start flex justify-between items-center">
         <div
           className="flex items-center my-5 pl-4 cursor-pointer"
           onClick={handleLogo}
         >
-          <IoLogoIonitron className="text-4xl md:text-7xl text-blue-400" />
+          <IoLogoIonitron className="text-4xl md:text-7xl text-blue-500" />
           <div className="text-center">
-            <h1 className="text-sm  text-gray-400">
+            <h1 className={`text-[10px]  md:text-sm ${theme === "light" ? "text-gray-500" : "text-white"}`}>
               {" "}
-              <span className="font-semibold md:text-xl">LINGUA </span>
+              <span className="font-semibold text-sm md:text-xl">LINGUA </span>
               TRANSLATOR
             </h1>
           </div>
+          
         </div>
+        <div className="text-2xl md:text-3xl p-3 font-semibold cursor-pointer mr-5 hover:text-[25px] md:hover:text-[35px]" onClick={handleToggle}>
+          {theme === "light" ? <FaMoon /> : <CiLight />
+          }
+          </div>
       </div>
 
       <div className="border-b-[1px] border-gray-500 w-full mt-4"></div>
       <div className="px-10">
         <div className=" flex flex-col justify-center items-center mt-10 md:mt-30 p-2">
           <p className="text-gray-500 flex items-center gap-1">
-            <IoLogoIonitron className="text-xl md:text-3xl text-gray-400" />{" "}
+            <IoLogoIonitron className="text-xl md:text-3xl text-gray-500" />{" "}
             <span className="text-sm md:text-xl font-semibold">
               Welcome to Lingua Language Translator!
             </span>
           </p>
-          <p className="text-[12px] md:text-sm text-gray-400 text-center">
+          <p className="text-[10px] md:text-sm text-gray-500 text-center">
             Effortlessly translate and summarize your text in seconds. Just
             type, and let Lingua do the magic!{" "}
           </p>
         </div>
-
+          
+          
         {/* section 2 */}
-        <div className=" w-full  p-5 bg-white fixed md:absolute bottom-0 left-0 ">
+        <div className={`w-full  p-5 ${theme === "light" ? "bg-white" : "bg-black"} fixed md:absolute bottom-0 left-0 `}>
           {/* Chat Output */}
           <div className="flex-grow overflow-y-auto h-auto mb-4 max-h-[22rem] md:max-h-[30rem] lg:max-h-[60rem]">
             {messages.map((msg, index) => (
               <div key={msg.id} className="mb-4 p-2 border-b ">
-                <div className="border-blue-400 border rounded-2xl space-y-1 p-3">
+                <div className="border-blue-500 border rounded-2xl space-y-1 p-3">
                   <div className="flex justify-between w-full items-center">
                     <h1 className="text-xs md:text-xl text-gray-500 font-semibold">
                       Text Input
                     </h1>
                     <button
                       onClick={() => clearMessage(msg.id)}
-                      className="text-blue-400 md:text-white text-xs md:text-sm md:bg-blue-400 p-1 rounded-full cursor-pointer"
+                      className="text-blue-500 md:text-white text-xs md:text-sm md:bg-blue-500 p-1 rounded-full cursor-pointer"
                     >
                       <RxCross1 />
                     </button>
@@ -201,7 +215,7 @@ const AiInterface = () => {
                   {msg.text.length > 150 && msg.detectedLanguage === "en" && (
                     <button
                       onClick={() => handleSummarize(index)}
-                      className="mt-2 bg-blue-400 text-white p-2 rounded-lg cursor-pointer text-[10px] md:text-sm"
+                      className="mt-2 bg-blue-500 text-white p-2 rounded-lg cursor-pointer text-[10px] md:text-sm"
                       disabled={loadingMessage[index]}
                     >
                       {loadingMessage[index] ? (
@@ -218,8 +232,8 @@ const AiInterface = () => {
                 </div>
 
                 {msg.summary && (
-                  <p className="p-3 rounded-2xl mt-1 bg-gray-300 text-[10px] md:text-sm">
-                    <span className="text-sm md:text-lg font-semibold text-blue-400">
+                  <p className={`p-3 rounded-2xl mt-1 bg-gray-300 text-[10px] md:text-sm ${theme === "light" ? "text-white" : "text-black"}`}>
+                    <span className="text-sm md:text-lg font-semibold text-blue-500">
                       Summary:
                     </span>{" "}
                     {msg.summary}
@@ -239,7 +253,7 @@ const AiInterface = () => {
                         )
                       );
                     }}
-                    className="border border-blue-400 p-1 rounded focus:outline-none text-[10px] md:text-sm"
+                    className={`border border-blue-500 p-1 rounded focus:outline-none text-[10px] md:text-sm ${theme === "light" ? "bg-white" : "bg-black"}`}
                   >
                     {languageNames &&
                       Object.entries(languageNames).map(([code, name]) => (
@@ -250,7 +264,7 @@ const AiInterface = () => {
                   </select>
 
                   <button
-                    className="bg-blue-400 text-white p-2 md:p-2 rounded-lg cursor-pointer flex items-center gap-1 text-[10px] md:text-sm"
+                    className="bg-blue-500 text-white p-2 md:p-2 rounded-lg cursor-pointer flex items-center gap-1 text-[10px] md:text-sm"
                     onClick={() => {
                       handleTranslate(index);
                     }}
@@ -270,7 +284,7 @@ const AiInterface = () => {
                 </div>
 
                 {msg.translation && (
-                  <p className="p-3 text-white rounded-2xl mt-1 bg-blue-400 text-[10px] md:text-sm">
+                  <p className="p-3 text-white rounded-2xl mt-1 bg-blue-500 text-[10px] md:text-sm">
                     <span className="text-sm md:text-lg font-semibold text-gray-500">
                       Translation:{" "}
                     </span>{" "}
@@ -283,7 +297,7 @@ const AiInterface = () => {
 
           {/* textarea section */}
           <div className="w-full px-3 sm:px-5 md:px-8 lg:px-10 md:mb-5">
-            <h1 className="text-xs md:text-lg text-blue-400 font-semibold my-1">
+            <h1 className="text-xs md:text-lg text-blue-500 font-semibold my-1">
               Translate and Summarize text
             </h1>
             <div className="flex items-center gap-3 ">
@@ -291,12 +305,18 @@ const AiInterface = () => {
                 placeholder="Type your text..."
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSend();
+                  }
+                }}
                 rows="2"
-                className="flex-grow text-xs md:text-lg  border border-blue-400 rounded-2xl focus:outline-none p-2 scroll-smooth resize-none max-h-50"
+                className="flex-grow text-xs md:text-lg  border border-blue-500 rounded-2xl focus:outline-none p-2 scroll-smooth resize-none max-h-50"
                 disabled={loading}
               />
               <button
-                className="p-3 rounded-full bg-blue-400 text-white"
+                className="p-3 rounded-full bg-blue-500 text-white cursor-pointer"
                 onClick={handleSend}
                 disabled={loadingMessage.sending}
               >
@@ -307,7 +327,7 @@ const AiInterface = () => {
                     className="w-5 h-5 inline"
                   />
                 ) : (
-                  <IoMdSend />
+                  <IoMdArrowRoundUp />
                 )}
               </button>
             </div>
