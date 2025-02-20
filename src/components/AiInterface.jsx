@@ -77,7 +77,7 @@ const AiInterface = () => {
         const updatedMessages = [...prevMessages, newMessage];
         return updatedMessages;
       });
-      
+
       setInputText("");
       const chatContainer = chatContainerRef.current;
       const previousScrollHeight = chatContainer?.scrollHeight || 0;
@@ -170,7 +170,7 @@ const AiInterface = () => {
           className="flex items-center my-5 pl-4 cursor-pointer"
           onClick={handleLogo}
         >
-          <IoLogoIonitron className="text-4xl md:text-7xl text-blue-500" />
+          <IoLogoIonitron className="text-4xl md:text-7xl text-blue-500 hover:text-blue-600" />
           <div className="text-center">
             <h1 className={`text-[10px]  md:text-sm ${theme === "light" ? "text-gray-500" : "text-white"}`}>
               {" "}
@@ -208,19 +208,19 @@ const AiInterface = () => {
           <div className="flex-grow overflow-y-auto h-auto mb-4 max-h-[22rem] md:max-h-[30rem] lg:max-h-[60rem]">
             {messages.map((msg, index) => (
               <div key={msg.id} className="mb-4 p-2 border-b ">
-                <div className="border-blue-500 border rounded-2xl space-y-1 p-3">
+                <div className="border-blue-500 border rounded-2xl space-y-1 p-3 ">
                   <div className="flex justify-between w-full items-center">
                     <h1 className="text-xs md:text-xl text-gray-500 font-semibold">
                       Text Input
                     </h1>
                     <button
                       onClick={() => clearMessage(msg.id)}
-                      className="text-blue-500 md:text-white text-xs md:text-sm md:bg-blue-500 p-1 rounded-full cursor-pointer"
+                      className="text-blue-500 md:text-white text-xs md:text-sm md:bg-blue-500 p-1 rounded-full cursor-pointer hover:bg-blue-600"
                     >
                       <RxCross1 />
                     </button>
                   </div>
-                  <p className=" text-[10px] md:text-sm p-3">{msg.text}</p>
+                  <p className=" text-[10px] md:text-sm p-3 overflow-hidden">{msg.text}</p>
                 </div>
 
                 <div className="flex justify-between items-center">
@@ -230,7 +230,7 @@ const AiInterface = () => {
                   {msg.text.length > 150 && msg.detectedLanguage === "en" && (
                     <button
                       onClick={() => handleSummarize(index)}
-                      className="mt-2 bg-blue-500 text-white p-2 rounded-lg cursor-pointer text-[10px] md:text-sm"
+                      className="mt-2 bg-blue-500 text-white p-2 rounded-lg cursor-pointer text-[10px] md:text-sm hover:bg-blue-600"
                       disabled={loadingMessage[index]}
                     >
                       {loadingMessage[index] ? (
@@ -268,7 +268,7 @@ const AiInterface = () => {
                         )
                       );
                     }}
-                    className={`border border-blue-500 p-1 rounded focus:outline-none text-[10px] md:text-sm ${theme === "light" ? "bg-white" : "bg-black"}`}
+                    className={`border border-blue-500  hover:border-2 p-1 rounded focus:outline-none text-[10px] md:text-sm cursor-pointer ${theme === "light" ? "bg-white" : "bg-black"}`}
                   >
                     {languageNames &&
                       Object.entries(languageNames).map(([code, name]) => (
@@ -279,7 +279,7 @@ const AiInterface = () => {
                   </select>
 
                   <button
-                    className="bg-blue-500 text-white p-2 md:p-2 rounded-lg cursor-pointer flex items-center gap-1 text-[10px] md:text-sm"
+                    className="bg-blue-500 text-white p-2 md:p-2 rounded-lg cursor-pointer flex items-center gap-1 text-[10px] md:text-sm hover:bg-blue-600"
                     onClick={() => {
                       handleTranslate(index);
                     }}
@@ -331,7 +331,7 @@ const AiInterface = () => {
                 disabled={loading}
               />
               <button
-                className="p-3 rounded-full bg-blue-500 text-white cursor-pointer"
+                className="p-3 rounded-full bg-blue-500 text-white cursor-pointer hover:bg-blue-600"
                 onClick={handleSend}
                 disabled={loadingMessage.sending}
               >
