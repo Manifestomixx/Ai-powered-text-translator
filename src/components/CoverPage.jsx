@@ -1,7 +1,9 @@
+"use client";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoLogoIonitron } from "react-icons/io";
 import { motion } from "framer-motion";
+
 
 
 const CoverPage = () => {
