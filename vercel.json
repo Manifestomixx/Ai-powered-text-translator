@@ -1,12 +1,5 @@
 {
-    "build": {
-      "env": {
-        "NODE_ENV": "production"
-      }
-    },
-    "functions": {
-      "api/*": {
-        "externalDependencies": ["framer-motion"]
-      }
-    }
+    "rewrites": [
+      { "source": "/(.*)", "destination": "/index.html" }
+    ]
   }
