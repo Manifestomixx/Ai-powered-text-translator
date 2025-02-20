@@ -23,7 +23,7 @@ const CoverPage = () => {
             <motion.div
             animate={{
               scale: [1, 1.1, 1], 
-              color: ["#A09F9F", "#60a5fa", "#A09F9F"],
+              color: ["#A09F9F", "#2b7fff", "#A09F9F"],
             }}
             transition={{
               duration: 1.7,
