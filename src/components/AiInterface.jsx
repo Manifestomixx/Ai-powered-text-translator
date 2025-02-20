@@ -17,7 +17,7 @@ const AiInterface = () => {
   const [loadingMessage, setLoadingMessage] = useState({});
   const [loading, setLoading] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("en");
-  const [theme, setTheme] = useState("light")
+  const [theme, setTheme] = useState("light");
   const { detectLanguage, isLoading, detectedLanguage, languageNames } =
     useLanguageDetector();
   const { summary, summarizeText } = useSummarizer();
@@ -33,6 +33,7 @@ const AiInterface = () => {
     setMessages((prevMessages) => prevMessages.filter((msg) => msg.id !== id));
   }
 
+  // Summarize function
   const handleSummarize = async (index) => {
     setLoadingMessage((prev) => ({ ...prev, [index]: true }));
     try {
@@ -52,6 +53,7 @@ const AiInterface = () => {
       }
     } catch (error) {
       console.error("Error summarizing text:", error);
+      setMessages("Summarization unavailable at this time. Try again later.")
     } finally {
       setLoadingMessage((prev) => ({ ...prev, [index]: false }));
     }
@@ -90,7 +92,8 @@ const AiInterface = () => {
           handleTranslate(messageIndex);
         }
         if (chatContainer) {
-          chatContainer.scrollTop = chatContainer.scrollHeight - previousScrollHeight;
+          chatContainer.scrollTop =
+            chatContainer.scrollHeight - previousScrollHeight;
         }
       }, 0);
     } catch (error) {
@@ -132,7 +135,9 @@ const AiInterface = () => {
           i === index
             ? {
                 ...msg,
-                translation: "Translation not available for selected language.",
+                translation: error
+                  ? "Translation is not available at this time. Try again later."
+                  : "Translation not available for selected language.",
               }
             : msg
         )
@@ -156,10 +161,12 @@ const AiInterface = () => {
     }
 
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
     }
 
-    document.body.className = theme === "light" ? "bg-white text-black" : "bg-black text-white";
+    document.body.className =
+      theme === "light" ? "bg-white text-black" : "bg-black text-white";
   }, [summary, theme, messages]);
 
   return (
@@ -172,21 +179,28 @@ const AiInterface = () => {
         >
           <IoLogoIonitron className="text-4xl md:text-7xl text-blue-500 hover:text-blue-600" />
           <div className="text-center">
-            <h1 className={`text-[10px]  md:text-sm ${theme === "light" ? "text-gray-500" : "text-white"}`}>
+            <h1
+              className={`text-[10px]  md:text-sm ${
+                theme === "light" ? "text-gray-500" : "text-white"
+              }`}
+            >
               {" "}
               <span className="font-semibold text-sm md:text-xl">LINGUA </span>
               TRANSLATOR
             </h1>
           </div>
-          
         </div>
-        <div className="text-2xl md:text-3xl p-3 font-semibold cursor-pointer mr-5 hover:text-[25px] md:hover:text-[35px]" onClick={handleToggle}>
-          {theme === "light" ? <FaMoon /> : <CiLight />
-          }
-          </div>
+        <div
+          className="text-2xl md:text-3xl p-3 font-semibold cursor-pointer mr-5 hover:text-[25px] md:hover:text-[35px]"
+          onClick={handleToggle}
+        >
+          {theme === "light" ? <FaMoon /> : <CiLight />}
+        </div>
       </div>
 
       <div className="border-b-[1px] border-gray-500 w-full mt-4"></div>
+
+      {/* Welcome section */}
       <div className="px-10">
         <div className=" flex flex-col justify-center items-center mt-10 md:mt-30 p-2">
           <p className="text-gray-500 flex items-center gap-1">
@@ -200,14 +214,20 @@ const AiInterface = () => {
             type, and let Lingua do the magic!{" "}
           </p>
         </div>
-          
-          
-        {/* section 2 */}
-        <div className={`w-full  p-5 ${theme === "light" ? "bg-white" : "bg-black"} fixed md:absolute bottom-0 left-0 `} ref={chatContainerRef}>
-          {/* Chat Output */}
+
+        {/* section 2  "For Input and Output"*/}
+        <div
+          className={`w-full  p-5 ${
+            theme === "light" ? "bg-white" : "bg-black"
+          } fixed md:absolute bottom-0 left-0 `}
+          ref={chatContainerRef}
+        >
+          {/* Text Output */}
           <div className="flex-grow overflow-y-auto h-auto mb-4 max-h-[22rem] md:max-h-[30rem] lg:max-h-[60rem]">
             {messages.map((msg, index) => (
               <div key={msg.id} className="mb-4 p-2 border-b ">
+
+                {/* Message Section */}
                 <div className="border-blue-500 border rounded-2xl space-y-1 p-3 ">
                   <div className="flex justify-between w-full items-center">
                     <h1 className="text-xs md:text-xl text-gray-500 font-semibold">
@@ -220,14 +240,21 @@ const AiInterface = () => {
                       <RxCross1 />
                     </button>
                   </div>
-                  <p className=" text-[10px] md:text-sm p-3 overflow-hidden">{msg.text}</p>
+
+                 {/* Message Inputted */}
+                  <p className=" text-[12px] md:text-sm p-3 overflow-hidden">
+                    {msg.text}
+                  </p>
                 </div>
 
+                {/* Detected language & Summarize Text */}
                 <div className="flex justify-between items-center">
                   <small className="text-[8px] md:text-sm text-gray-500">
                     Language: {msg.detectedLanguage}
                   </small>
-                  {msg.text.length > 150 && msg.detectedLanguage === "en" && (
+
+                  {/* Summarize Button */}
+                  {msg.text.length > 150 && (!msg.detectedLanguage || msg.detectedLanguage === "en") && (
                     <button
                       onClick={() => handleSummarize(index)}
                       className="mt-2 bg-blue-500 text-white p-2 rounded-lg cursor-pointer text-[10px] md:text-sm hover:bg-blue-600"
@@ -245,9 +272,14 @@ const AiInterface = () => {
                     </button>
                   )}
                 </div>
-
+                
+                {/* Summarized Message */}
                 {msg.summary && (
-                  <p className={`p-3 rounded-2xl mt-1 bg-gray-300 text-[10px] md:text-sm ${theme === "light" ? "text-white" : "text-black"}`}>
+                  <p
+                    className={`p-3 rounded-2xl mt-1 bg-gray-300 text-[12px] md:text-sm ${
+                      theme === "light" ? "text-black" : "text-black"
+                    }`}
+                  >
                     <span className="text-sm md:text-lg font-semibold text-blue-500">
                       Summary:
                     </span>{" "}
@@ -255,6 +287,8 @@ const AiInterface = () => {
                   </p>
                 )}
 
+                
+                {/* Language Selection */}
                 <div className="md:mt-2 flex items-center gap-2 mt-5">
                   <select
                     value={msg.selectedLanguage || "en"}
@@ -268,7 +302,9 @@ const AiInterface = () => {
                         )
                       );
                     }}
-                    className={`border border-blue-500  hover:border-2 p-1 rounded focus:outline-none text-[10px] md:text-sm cursor-pointer ${theme === "light" ? "bg-white" : "bg-black"}`}
+                    className={`border border-blue-500  hover:border-2 p-1 rounded focus:outline-none text-[10px] md:text-sm cursor-pointer ${
+                      theme === "light" ? "bg-white" : "bg-black"
+                    }`}
                   >
                     {languageNames &&
                       Object.entries(languageNames).map(([code, name]) => (
@@ -278,6 +314,8 @@ const AiInterface = () => {
                       ))}
                   </select>
 
+
+                  {/* Translate Language */}
                   <button
                     className="bg-blue-500 text-white p-2 md:p-2 rounded-lg cursor-pointer flex items-center gap-1 text-[10px] md:text-sm hover:bg-blue-600"
                     onClick={() => {
@@ -297,9 +335,10 @@ const AiInterface = () => {
                     Translate
                   </button>
                 </div>
-
+                
+                {/* Translate Message */}
                 {msg.translation && (
-                  <p className="p-3 text-white rounded-2xl mt-1 bg-blue-500 text-[10px] md:text-sm">
+                  <p className="p-3 text-white rounded-2xl mt-1 bg-blue-500 text-[12px] md:text-sm">
                     <span className="text-sm md:text-lg font-semibold text-gray-500">
                       Translation:{" "}
                     </span>{" "}
@@ -310,7 +349,7 @@ const AiInterface = () => {
             ))}
           </div>
 
-          {/* textarea section */}
+          {/* Text Input */}
           <div className="w-full px-3 sm:px-5 md:px-8 lg:px-10 md:mb-5">
             <h1 className="text-xs md:text-lg text-blue-500 font-semibold my-1">
               Translate and Summarize text
