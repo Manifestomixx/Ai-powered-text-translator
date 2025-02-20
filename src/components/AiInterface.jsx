@@ -8,10 +8,7 @@ import { useLanguageDetector } from "../chrome/languageDetector";
 import { useSummarizer } from "../chrome/Summarizer";
 import { useTranslator } from "../chrome/TextTranslator";
 import spinner from "../assets/svg-spinners--180-ring-with-bg.svg"
-import CoverPage from "../components/CoverPage";
 
-
-import { motion } from "framer-motion";
 
 
 const AiInterface = () => {
@@ -24,29 +21,10 @@ const AiInterface = () => {
     useLanguageDetector();
   const { summary, summarizeText } = useSummarizer();
   const { translateText, translatedText, error } = useTranslator();
-  const [showCoverPage, setShowCoverPage] = useState(false);
   const navigate = useNavigate();
 
   
 
-  const floatingVariants = {
-    initial: {
-      y: 0,
-      opacity: 0.8,
-      scale: 1,
-    },
-    animate: {
-      y: [0, -30, 0],
-      opacity: [0.8, 1, 0.8],
-      scale: [1, 1.2, 1],
-      rotate: [0, 10, -10, 0],
-      transition: {
-        duration: 5,
-        repeat: Infinity,
-        ease: "easeInOut",
-      },
-    },
-  };
 
   function handleLogo () {
     navigate("/cover");
