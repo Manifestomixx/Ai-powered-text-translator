@@ -53,7 +53,13 @@ const AiInterface = () => {
       }
     } catch (error) {
       console.error("Error summarizing text:", error);
-      setMessages("Summarization unavailable at this time. Try again later.")
+      setMessages((prevMessages) =>
+     prevMessages.map((msg, i) =>
+       i === index
+         ? { ...msg, summary: "Summarization unavailable at this time. Try again later." }
+         : msg
+     )
+   );
     } finally {
       setLoadingMessage((prev) => ({ ...prev, [index]: false }));
     }
