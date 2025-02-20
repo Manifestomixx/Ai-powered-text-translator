@@ -140,7 +140,7 @@ const AiInterface = () => {
   }, [summary]);
 
   return (
-    <main className="relative h-dvh md:min-h-dvh overflow-hidden ">
+    <main className="relative min-h-screen md:min-h-dvh overflow-hidden ">
       {/* Logo section */}
       <div className="text-start">
         <div
@@ -174,9 +174,9 @@ const AiInterface = () => {
         </div>
 
         {/* section 2 */}
-        <div className=" w-full  p-5 bg-white absolute bottom-0 left-0 ">
+        <div className=" w-full  p-5 bg-white fixed md:absolute bottom-0 left-0 ">
           {/* Chat Output */}
-          <div className="flex-grow overflow-y-auto h-auto mb-4 max-h-[24rem] md:max-h-[38rem] lg:max-h-[60rem]">
+          <div className="flex-grow overflow-y-auto h-auto mb-4 max-h-[24rem] md:max-h-[30rem] lg:max-h-[60rem]">
             {messages.map((msg, index) => (
               <div key={msg.id} className="mb-4 p-2 border-b ">
                 <div className="border-blue-400 border rounded-2xl space-y-1 p-3">
@@ -282,7 +282,7 @@ const AiInterface = () => {
           </div>
 
           {/* textarea section */}
-          <div className="w-full px-3 sm:px-5 md:px-8 lg:px-10 mb-5">
+          <div className="w-full px-3 sm:px-5 md:px-8 lg:px-10 md:mb-5">
             <h1 className="text-xs md:text-lg text-blue-400 font-semibold my-1">
               Translate and Summarize text
             </h1>
