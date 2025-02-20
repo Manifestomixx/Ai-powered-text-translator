@@ -73,7 +73,11 @@ const AiInterface = () => {
         translation: "",
         selectedLanguage,
       };
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      setMessages((prevMessages) => {
+        const updatedMessages = [...prevMessages, newMessage];
+        return updatedMessages;
+      });
+      
       setInputText("");
       const chatContainer = chatContainerRef.current;
       const previousScrollHeight = chatContainer?.scrollHeight || 0;
@@ -150,8 +154,13 @@ const AiInterface = () => {
         )
       );
     }
+
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+
     document.body.className = theme === "light" ? "bg-white text-black" : "bg-black text-white";
-  }, [summary, theme]);
+  }, [summary, theme, messages]);
 
   return (
     <main className="relative min-h-screen md:min-h-dvh overflow-hidden ">
