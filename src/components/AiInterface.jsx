@@ -176,7 +176,7 @@ const AiInterface = () => {
         {/* section 2 */}
         <div className=" w-full  p-5 bg-white fixed md:absolute bottom-0 left-0 ">
           {/* Chat Output */}
-          <div className="flex-grow overflow-y-auto h-auto mb-4 max-h-[24rem] md:max-h-[30rem] lg:max-h-[60rem]">
+          <div className="flex-grow overflow-y-auto h-auto mb-4 max-h-[22rem] md:max-h-[30rem] lg:max-h-[60rem]">
             {messages.map((msg, index) => (
               <div key={msg.id} className="mb-4 p-2 border-b ">
                 <div className="border-blue-400 border rounded-2xl space-y-1 p-3">
