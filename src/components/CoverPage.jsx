@@ -33,7 +33,7 @@ const CoverPage = () => {
           >
             <IoLogoIonitron className="text-[7rem] mb-2" />
           </motion.div>
-            <h3 className="text-sm font-semibold text-gray-300">LINGUA TRANSLATOR 1.0</h3>
+            <h3 className="text-xs md:text-sm font-semibold text-gray-300">LINGUA TRANSLATOR 1.0</h3>
           </div>
     </>
   );

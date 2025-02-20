@@ -123,7 +123,7 @@ console.log("Summarizing completed:", summaryText);
   }, [summary]);
 
   return (
-    <main className=" h-screen md:min-h-dvh ">
+    <main className="relative h-screen md:min-h-dvh overflow-hidden ">
       {/* Logo section */}
       <div className="text-start">
         <div className="flex items-center my-5 pl-4 cursor-pointer" onClick={handleLogo}>
@@ -144,9 +144,9 @@ console.log("Summarizing completed:", summaryText);
         </div>
 
         {/* section 2 */}
-      <div className=" fixed bottom-0 left-0 w-full p-5 bg-white shadow-lg">
+      <div className=" w-full  p-5 bg-white">
         {/* Chat Output */}
-        <div className="flex-grow overflow-y-auto h-auto mb-4 max-h-[rem] md:max-h-[40rem]">
+        <div className="flex-grow overflow-y-auto h-auto mb-4 max-h-[20rem] md:max-h-[40rem]">
           {messages.map((msg, index) => (
             <div key={msg.id} className="mb-4 p-2 border-b ">
 
@@ -161,7 +161,7 @@ console.log("Summarizing completed:", summaryText);
               <div className="flex justify-between items-center"> 
               <small className="text-gray-500">Language: {msg.detectedLanguage}</small>
               {msg.text.length > 150 && msg.detectedLanguage === "en" && (
-              <button onClick={() => handleSummarize(index)} className="mt-2 bg-blue-400 text-white p-2 rounded-lg cursor-pointer" disabled={loadingMessage[index]} >{loadingMessage[index] ? <img src={spinner} alt="Loading..." className="w-5 h-5 inline" /> : "Summarize"}</button>
+              <button onClick={() => handleSummarize(index)} className="mt-2 bg-blue-400 text-white p-2 rounded-lg cursor-pointer text-xs md:text-lg" disabled={loadingMessage[index]} >{loadingMessage[index] ? <img src={spinner} alt="Loading..." className="w-5 h-5 inline" /> : "Summarize"}</button>
             )}
               </div>
                 
@@ -169,7 +169,7 @@ console.log("Summarizing completed:", summaryText);
                 <p className="p-3 rounded-2xl mt-1 bg-gray-300 text-sm md:text-lg"><span className="text-xl font-semibold text-blue-400">Summary:</span> {msg.summary}</p>
               )}
 
-              <div className="mt-2 flex items-center gap-2">
+              <div className="md:mt-2 flex items-center gap-2 mt-5">
                 <select
                   value={msg.selectedLanguage || "en"}
                   onChange={(e) => {
@@ -180,7 +180,7 @@ console.log("Summarizing completed:", summaryText);
                       )
                     );
                   }}
-                  className="border border-blue-400 p-1 rounded focus:outline-none"
+                  className="border border-blue-400 p-1 rounded focus:outline-none text-xs md:text-lg"
                 >
                   {languageNames && Object.entries(languageNames).map(([code, name]) => (
                       <option key={code} value={code} >
@@ -190,14 +190,14 @@ console.log("Summarizing completed:", summaryText);
                 </select>
                 
                 <button
-                  className="bg-blue-400 text-white p-2 rounded-lg cursor-pointer flex items-center gap-1"
+                  className="bg-blue-400 text-white p-1 md:p-2 rounded-lg cursor-pointer flex items-center gap-1"
                   onClick={() => {
                     handleTranslate(index);
                   }}
                   disabled={loadingMessage[`translate-${index}`]}
                   
                 >
-                  {loadingMessage[`translate-${index}`] ? <img src={spinner} alt="Loading..." className="w-5 h-5 inline" /> : <MdOutlineTranslate className="text-xl" />} Translate
+                  {loadingMessage[`translate-${index}`] ? <img src={spinner} alt="Loading..." className="w-5 h-5 inline" /> : <MdOutlineTranslate className="text-sx md:text-xl" />} Translate
                 </button>
               </div>
 
@@ -210,10 +210,10 @@ console.log("Summarizing completed:", summaryText);
           ))}
         </div>
         
+        {/* textarea section */}
+        <div className="absolute bottom-0 left-0 w-full px-3 sm:px-5 md:px-8 lg:px-10  mb-10">
 
-        <div className="w-full md:p-5">
-
-        <h1 className="md:text-lg font-semibold mb-1">What can I help with?</h1>
+        <h1 className="md:text-lg font-semibold my-1">What can I help with?</h1>
         <div className="flex items-center gap-3 ">
           <textarea
             placeholder="Type your text..."
