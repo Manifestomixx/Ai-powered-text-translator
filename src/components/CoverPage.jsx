@@ -19,7 +19,7 @@ const CoverPage = () => {
   
   return (
     <>
-          <div className="bg-white p-6 flex flex-col justify-center items-center w-full h-dvh z-10 fixed">
+          <div className="bg-white p-6 flex flex-col justify-center m-auto items-center w-full h-dvh z-10 fixed left-0">
             <motion.div
             animate={{
               scale: [1, 1.1, 1], 

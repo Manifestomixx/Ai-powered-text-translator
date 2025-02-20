@@ -16,7 +16,7 @@ const LayoutWrapper = ({children}) => {
   
   
   return (
-    <div className="2xl:container w-[100%] mx-auto h-auto min-h-[100vh] relative">
+    <div className="2xl:container w-[100%] mx-auto h-auto min-h-[100vh]">
       {children}
     </div>
   )

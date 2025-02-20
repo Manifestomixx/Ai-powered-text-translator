@@ -3,10 +3,6 @@ import { languageNames } from "./langCode";
 
 export const useTranslator = () => {
   async function translateText(text, sourceLang, targetLang) {
-    // if (!("ai" in self) || !("translator" in self.ai)) {
-    //   console.error("Translator API not supported.");
-    //   return;
-    // }
 
     console.log("Validating translation:", { text, sourceLang, targetLang });
 
