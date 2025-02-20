@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoMdArrowRoundUp } from "react-icons/io";
 import { RxCross1 } from "react-icons/rx";
@@ -22,6 +22,7 @@ const AiInterface = () => {
     useLanguageDetector();
   const { summary, summarizeText } = useSummarizer();
   const { translateText, translatedText, error } = useTranslator();
+  const chatContainerRef = useRef(null);
   const navigate = useNavigate();
 
   function handleLogo() {
@@ -74,6 +75,8 @@ const AiInterface = () => {
       };
       setMessages((prevMessages) => [...prevMessages, newMessage]);
       setInputText("");
+      const chatContainer = chatContainerRef.current;
+      const previousScrollHeight = chatContainer?.scrollHeight || 0;
 
       setTimeout(() => {
         const messageIndex = messages.findIndex(
@@ -82,7 +85,10 @@ const AiInterface = () => {
         if (messageIndex !== -1) {
           handleTranslate(messageIndex);
         }
-      }, 100);
+        if (chatContainer) {
+          chatContainer.scrollTop = chatContainer.scrollHeight - previousScrollHeight;
+        }
+      }, 0);
     } catch (error) {
       console.error("Error processing message", error);
     } finally {
@@ -188,7 +194,7 @@ const AiInterface = () => {
           
           
         {/* section 2 */}
-        <div className={`w-full  p-5 ${theme === "light" ? "bg-white" : "bg-black"} fixed md:absolute bottom-0 left-0 `}>
+        <div className={`w-full  p-5 ${theme === "light" ? "bg-white" : "bg-black"} fixed md:absolute bottom-0 left-0 `} ref={chatContainerRef}>
           {/* Chat Output */}
           <div className="flex-grow overflow-y-auto h-auto mb-4 max-h-[22rem] md:max-h-[30rem] lg:max-h-[60rem]">
             {messages.map((msg, index) => (
