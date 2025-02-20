@@ -1,22 +1,26 @@
 import { useState } from "react";
 
 export const languageNames = {
-    en: "English",
-    tr: "Turkish",
-    pt: "Portuguese",
-    es: "Spanish",
-    ru: "Russian",
-    fr: "French",
-  };
-  
+  en: "English",
+  tr: "Turkish",
+  pt: "Portuguese",
+  es: "Spanish",
+  ru: "Russian",
+  fr: "French",
+};
 
 export const useLanguageDetector = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [detectedLanguage, setDetectedLanguage] = useState("");
 
   const detectLanguage = async (inputText) => {
-    if (!("ai" in self && "languageDetector" in self.ai)) {
-      console.log("❌ The Language Detector API is not supported in this browser.");
+    if (typeof window === "undefined") {
+      console.log("⚠️ Language detection is disabled during server-side rendering.");
+      return;
+    }
+
+    if (!("ai" in window && "languageDetector" in window.ai)) {
+      console.log("❌ The Language Detector API is not supported in this environment.");
       return;
     }
 
@@ -24,7 +28,7 @@ export const useLanguageDetector = () => {
     console.log("✅ The Language Detector API is available.");
 
     try {
-      const capabilities = await self.ai.languageDetector.capabilities();
+      const capabilities = await window.ai.languageDetector.capabilities();
 
       if (capabilities.available === "no") {
         console.error("🚫 Language Detector is not available.");
@@ -32,19 +36,15 @@ export const useLanguageDetector = () => {
         return;
       }
 
-      const detector = await self.ai.languageDetector.create();
+      const detector = await window.ai.languageDetector.create();
       console.log("✅ Detector initialized successfully.");
 
       const results = await detector.detect(inputText);
 
       if (results.length > 0) {
         const detectedCode = results[0].detectedLanguage;
-        // const matchedLanguage = languageNames.find(lang => lang.code === detectedCode);
-        // const detectedName = matchedLanguage ? matchedLanguage.name : "Unknown";
-
         setDetectedLanguage(detectedCode);
-        console.log(`Detected Language: ${detectedCode} (${detectedCode}), Confidence: ${results[0].confidence}`);
-
+        console.log(`Detected Language: ${detectedCode}, Confidence: ${results[0].confidence}`);
         return detectedCode;
       } else {
         setDetectedLanguage("Unknown");
