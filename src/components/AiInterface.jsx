@@ -10,6 +10,7 @@ import { useTranslator } from "../chrome/TextTranslator";
 import spinner from "../assets/svg-spinners--180-ring-with-bg.svg";
 import { CiLight } from "react-icons/ci";
 import { FaMoon } from "react-icons/fa";
+import { RxCross2 } from "react-icons/rx";
 
 const AiInterface = () => {
   const [messages, setMessages] = useState([]);
@@ -20,6 +21,7 @@ const AiInterface = () => {
   const [theme, setTheme] = useState("light");
   const { detectLanguage, isLoading, detectedLanguage, languageNames } =
     useLanguageDetector();
+  const [apiError, setApiError] = useState(false);
   const { summary, summarizeText } = useSummarizer();
   const { translateText, translatedText, error } = useTranslator();
   const chatContainerRef = useRef(null);
@@ -37,6 +39,9 @@ const AiInterface = () => {
   const handleSummarize = async (index) => {
     setLoadingMessage((prev) => ({ ...prev, [index]: true }));
     try {
+      if (apiError) {
+        throw new Error("Feature not supported");
+      }  
       const message = messages[index];
       console.log("Summarizing started...");
       const summaryText = await summarizeText(message.text);
@@ -56,7 +61,7 @@ const AiInterface = () => {
       setMessages((prevMessages) =>
      prevMessages.map((msg, i) =>
        i === index
-         ? { ...msg, summary: "Summarization unavailable at this time. Try again later." }
+         ? { ...msg, summary: apiError ? "Feature not supported" : "Summarization unavailable at this time. Try again later." }
          : msg
      )
    );
@@ -113,6 +118,9 @@ const AiInterface = () => {
   const handleTranslate = async (index) => {
     setLoadingMessage((prev) => ({ ...prev, [`translate-${index}`]: true }));
     try {
+      if (apiError) {
+        throw new Error("Feature not supported");
+      }
       const message = messages[index];
 
       if (
@@ -130,7 +138,7 @@ const AiInterface = () => {
       if (translation) {
         setMessages((prevMessages) =>
           prevMessages.map((msg, i) =>
-            i === index ? { ...msg, translation } : msg
+            i === index ? { ...msg, translation: translation || "Translation not available for selected language." } : msg
           )
         );
       }
@@ -141,9 +149,7 @@ const AiInterface = () => {
           i === index
             ? {
                 ...msg,
-                translation: error
-                  ? "Translation is not available at this time. Try again later."
-                  : "Translation not available for selected language.",
+                translation: apiError ? "Feature not supported" : "Translation is not available at this time. Try again later."
               }
             : msg
         )
@@ -158,6 +164,7 @@ const AiInterface = () => {
   }
 
   useEffect(() => {
+
     if (summary && messages.length > 0) {
       setMessages((prevMessages) =>
         prevMessages.map((msg) =>
@@ -175,8 +182,34 @@ const AiInterface = () => {
       theme === "light" ? "bg-white text-black" : "bg-black text-white";
   }, [summary, theme, messages]);
 
+  useEffect(() => {
+    const checkApiSupport = () => {
+      if (
+        !("ai" in self) ||
+        !self.ai?.translator ||
+        !self.ai?.summarizer ||
+        !self.ai?.languageDetector
+      ) {
+        setApiError(true);
+      }
+    };
+  
+    checkApiSupport();
+  
+  }, []);
+
   return (
     <main className="relative min-h-screen md:min-h-dvh overflow-hidden ">
+
+{apiError !== null && (
+  <div className={`fixed top-5 left-1/2 transform -translate-x-1/2 p-4 rounded-lg shadow-lg flex items-center gap-3 z-50 ${apiError ? "bg-red-600" : "bg-blue-600"} text-white`}>
+    <span>{apiError ? "❌ Your device does not support the required Chrome AI APIs." : "✅ Chrome AI APIs are supported on your device."}</span>
+    <button onClick={() => setApiError(null)} className="text-white cursor-pointer">
+      <RxCross2 className="w-5 h-5" />
+    </button>
+  </div>
+)}
+
       {/* Logo section */}
       <div className="text-start flex justify-between items-center">
         <div
