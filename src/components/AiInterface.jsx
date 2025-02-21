@@ -61,7 +61,7 @@ const AiInterface = () => {
       setMessages((prevMessages) =>
      prevMessages.map((msg, i) =>
        i === index
-         ? { ...msg, summary: apiError ? "Feature not supported" : "Summarization unavailable at this time. Try again later." }
+         ? { ...msg, summary: apiError ? "This feature not supported on your device" : "Summarization unavailable at this time. Try again later." }
          : msg
      )
    );
@@ -149,7 +149,7 @@ const AiInterface = () => {
           i === index
             ? {
                 ...msg,
-                translation: apiError ? "Feature not supported" : "Translation is not available at this time. Try again later."
+                translation: apiError ? "This feature not supported on your device" : "Translation is not available at this time. Try again later."
               }
             : msg
         )
