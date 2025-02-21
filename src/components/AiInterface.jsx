@@ -40,8 +40,16 @@ const AiInterface = () => {
     setLoadingMessage((prev) => ({ ...prev, [index]: true }));
     try {
       if (apiError) {
-        throw new Error("This feature not supported on your device");
-      }  
+        setMessages((prevMessages) =>
+          prevMessages.map((msg, i) =>
+            i === index
+              ? { ...msg, summary: "This feature is not supported on your device" }
+              : msg
+          )
+        );
+        return;
+      }
+      
       const message = messages[index];
       console.log("Summarizing started...");
       const summaryText = await summarizeText(message.text);
@@ -119,8 +127,16 @@ const AiInterface = () => {
     setLoadingMessage((prev) => ({ ...prev, [`translate-${index}`]: true }));
     try {
       if (apiError) {
-        throw new Error("This feature not supported on your device");
+        setMessages((prevMessages) =>
+          prevMessages.map((msg, i) =>
+            i === index
+              ? { ...msg, summary: "This feature is not supported on your device" }
+              : msg
+          )
+        );
+        return;
       }
+
       const message = messages[index];
 
       if (
@@ -158,7 +174,7 @@ const AiInterface = () => {
       setLoadingMessage((prev) => ({ ...prev, [`translate-${index}`]: false }));
     }
   };
-
+  
   function handleToggle() {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   }
@@ -191,6 +207,8 @@ const AiInterface = () => {
         !self.ai?.languageDetector
       ) {
         setApiError(true);
+      } else {
+        setApiError(false);
       }
     };
   
