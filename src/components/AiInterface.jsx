@@ -40,7 +40,7 @@ const AiInterface = () => {
     setLoadingMessage((prev) => ({ ...prev, [index]: true }));
     try {
       if (apiError) {
-        throw new Error("Feature not supported");
+        throw new Error("This feature not supported on your device");
       }  
       const message = messages[index];
       console.log("Summarizing started...");
@@ -119,7 +119,7 @@ const AiInterface = () => {
     setLoadingMessage((prev) => ({ ...prev, [`translate-${index}`]: true }));
     try {
       if (apiError) {
-        throw new Error("Feature not supported");
+        throw new Error("This feature not supported on your device");
       }
       const message = messages[index];
 
