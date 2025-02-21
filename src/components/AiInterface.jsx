@@ -190,7 +190,7 @@ const AiInterface = () => {
         !self.ai?.summarizer ||
         !self.ai?.languageDetector
       ) {
-        setApiError(false);
+        setApiError(true);
       }
     };
   
